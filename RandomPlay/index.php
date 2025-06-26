@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Play - Film Rental</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="randomcihuy.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -24,6 +25,36 @@
     </header>
 
     <main>
+        <h2>Film Statistics</h2>
+        <div>
+            <?php
+            // Query untuk SUM Stok
+            $sql_sum_tersedia = "SELECT SUM(tersedia) FROM kasetfilm";
+            $result_sum_tersedia = $koneksi->query($sql_sum_tersedia);
+            $total_tersedia = $result_sum_tersedia->fetch_assoc()['SUM(tersedia)'];
+
+            // Query untuk MAX Harga Sewa
+            $sql_max_harga = "SELECT MAX(hargasewa) FROM kasetfilm";
+            $result_max_harga = $koneksi->query($sql_max_harga);
+            $max_harga = $result_max_harga->fetch_assoc()['MAX(hargasewa)'];
+
+
+            // Query untuk MIN Harga Sewa
+            $sql_min_harga = "SELECT MIN(hargasewa) FROM kasetfilm";
+            $result_min_harga = $koneksi->query($sql_min_harga);
+            $min_harga = $result_min_harga->fetch_assoc()['MIN(hargasewa)'];
+            ?>
+            <div>
+                <p>Total Film Stock : <?php echo htmlspecialchars($total_tersedia); ?></p>
+            </div>
+            <div>
+                <p>Highest Rental Price : Rp.<?php echo htmlspecialchars(number_format($max_harga, 0, ',', '.')); ?></p>
+            </div>
+            <div>
+                <p>Lowest Rental Price : Rp.<?php echo htmlspecialchars(number_format($min_harga, 0, ',', '.')); ?></p>
+            </div>
+        </div>
+
         <h2>Available Films</h2>
         <div class="film-grid">
             <?php
@@ -38,7 +69,7 @@
                     echo '<p>Year: ' . htmlspecialchars($row['tahunrilis']) . '</p>';
                     echo '<p>Rating: ' . htmlspecialchars($row['rating']) . '/10</p>';
                     echo '<p>Stock: ' . htmlspecialchars($row['stok']) . '</p>';
-                    echo '<p>Price: $' . htmlspecialchars($row['hargasewa']) . '</p>';
+                    echo '<p>Price: Rp.' . htmlspecialchars($row['hargasewa']) . '</p>';
 
                     if (isset($_SESSION['customer'])) {
                         echo '<form action="rent.php" method="post">';
@@ -55,10 +86,6 @@
             ?>
         </div>
     </main>
-
-    <footer>
-        <p>&copy; 2023 Random Play Film Rental</p>
-    </footer>
 </body>
 
 </html>

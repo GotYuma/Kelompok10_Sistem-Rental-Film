@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_film'])) {
 
     if ($koneksi->query($sql)) {
         // Update film stock
-        $sql = "UPDATE kasetfilm SET stok = stok - 1 WHERE id_film = $id_film";
+        $sql = "UPDATE kasetfilm SET tersedia = tersedia - 1 WHERE id_film = $id_film";
         $koneksi->query($sql);
 
         // Check if stock reached 0
