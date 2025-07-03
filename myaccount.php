@@ -8,7 +8,6 @@ if (!isset($_SESSION['customer'])) {
 }
 
 $customer = $_SESSION['customer']; // Mengambil data customer dari session
-
 // --- Tambahkan ini untuk menangani pesan dari update_process.php atau return_process.php ---
 $message = '';
 $message_type = ''; // 'success' atau 'error'
