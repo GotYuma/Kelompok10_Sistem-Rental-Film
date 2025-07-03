@@ -33,7 +33,7 @@
             $result_sum_tersedia = $koneksi->query($sql_sum_tersedia);
             $total_tersedia = $result_sum_tersedia->fetch_assoc()['SUM(tersedia)'];
 
-            // Query untuk SUM Stok
+            // Query untuk SUM Stok sdfsdf
             $sql_max_harga_film = "SELECT judul, hargasewa FROM kasetfilm WHERE hargasewa = (SELECT MAX(hargasewa) FROM kasetfilm) LIMIT 1";
             $result_max_harga_film = $koneksi->query($sql_max_harga_film);
             $max_film_data = null;
