@@ -42,7 +42,6 @@
             }
             $max_harga = $max_film_data ? $max_film_data['hargasewa'] : 0;
             $max_film_judul = $max_film_data ? $max_film_data['judul'] : 'N/A';
-
             // Query untuk MIN Harga Sewa
             $sql_min_harga_film = "SELECT judul, hargasewa FROM kasetfilm WHERE hargasewa = (SELECT MIN(hargasewa) FROM kasetfilm) LIMIT 1";
             $result_min_harga_film = $koneksi->query($sql_min_harga_film);
