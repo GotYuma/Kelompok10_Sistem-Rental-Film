@@ -23,7 +23,6 @@
             <?php endif; ?>
         </nav>
     </header>
-
     <main>
         <h2>Film Statistics</h2>
         <div>
