@@ -72,7 +72,8 @@ if (isset($_GET['success'])) {
 
         /* Gaya tambahan untuk tombol hapus */
         .return-button {
-            background-color: #dc3545; /* Merah */
+            background-color: #dc3545;
+            /* Merah */
             color: white;
             padding: 5px 10px;
             border: none;
@@ -80,21 +81,39 @@ if (isset($_GET['success'])) {
             cursor: pointer;
             font-size: 0.9em;
         }
+
         .return-button:hover {
             background-color: #c82333;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #aaa;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+
+        .discounted-price {
+            font-weight: bold;
+            color: #28a745;
+            /* Warna hijau untuk harga diskon */
         }
     </style>
 </head>
@@ -112,7 +131,8 @@ if (isset($_GET['success'])) {
     <main>
         <h2>Welcome, <?php echo htmlspecialchars($customer['nama']); ?></h2>
 
-        <?php if ($message): // Tampilkan pesan jika ada ?>
+        <?php if ($message): // Tampilkan pesan jika ada 
+        ?>
             <div class="message <?php echo $message_type; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
@@ -125,36 +145,73 @@ if (isset($_GET['success'])) {
             <p>Address: <?php echo htmlspecialchars($customer['alamat']); ?></p>
             <p>Member Since: <?php echo htmlspecialchars($customer['tanggaldaftar']); ?></p>
             <p>Status: <?php echo htmlspecialchars($customer['statusmember']); ?></p>
+
+            <?php
+            if (isset($_SESSION['customer']['id_cust'])) {
+                $customer_id = $_SESSION['customer']['id_cust'];
+
+                // Call the SQL Function
+                $sql_active_rentals = "SELECT GET_CUSTOMER_ACTIVE_RENTALS(?) AS active_rentals_count";
+                $stmt = $koneksi->prepare($sql_active_rentals);
+                $stmt->bind_param("i", $customer_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                $active_rentals_count = $row['active_rentals_count'];
+                $stmt->close();
+
+                // Now you can display $active_rentals_count on your page
+                echo "<p>Jumlah Film yang Sedang Disewa: <strong>" . htmlspecialchars($active_rentals_count) . "</strong></p>";
+            } else {
+                echo "<p>Silakan login untuk melihat detail akun Anda.</p>";
+            }
+            ?>
         </div>
 
-            <br>
+        <br>
         <form action="updateaccount.php">
             <input type="submit" value="Update Account">
         </form>
-            <br>
+        <br>
 
         <div class="rental-history">
             <h3>Your Rentals</h3>
             <?php
-            // Mengambil riwayat sewa
-            $sql = "SELECT r.*, k.judul
+            // Mengambil riwayat sewa, termasuk info promo dan harga asli film
+            $sql = "SELECT r.*, k.judul, k.hargasewa AS harga_asli_film, p.nama_promo, p.diskon_persen
                     FROM rent r
                     JOIN kasetfilm k ON r.id_film = k.id_film
+                    LEFT JOIN promo p ON r.id_promo = p.id_promo -- LEFT JOIN untuk promo
                     WHERE r.id_cust = " . $customer['id_cust'] . "
                     ORDER BY r.tanggalsewa DESC";
             $result = $koneksi->query($sql);
 
             if ($result->num_rows > 0) {
                 echo '<table>';
-                // --- Kolom 'Aksi' ditambahkan di sini ---
-                echo '<tr><th>Film Title</th><th>Rental Date</th><th>Status</th><th>Cost</th><th>Aksi</th></tr>';
+                // --- Kolom 'Aksi' dan 'Promo Digunakan' ditambahkan di sini ---
+                echo '<tr><th>Film Title</th><th>Rental Date</th><th>Status</th><th>Cost</th><th>Promo Used</th><th>Aksi</th></tr>';
 
                 while ($row = $result->fetch_assoc()) {
                     echo '<tr>';
                     echo '<td>' . htmlspecialchars($row['judul']) . '</td>';
                     echo '<td>' . htmlspecialchars($row['tanggalsewa']) . '</td>';
                     echo '<td>' . htmlspecialchars($row['status']) . '</td>';
-                    echo '<td>Rp.' . htmlspecialchars($row['biaya']) . '</td>';
+                    echo '<td>';
+                    // Tampilkan harga asli jika ada promo, dan harga setelah diskon
+                    if (!empty($row['nama_promo'])) {
+                        echo '<span class="original-price">Rp.' . htmlspecialchars(number_format($row['harga_asli_film'], 0, ',', '.')) . '</span>';
+                        echo '<span class="discounted-price">Rp.' . htmlspecialchars(number_format($row['biaya'], 0, ',', '.')) . '</span>';
+                    } else {
+                        echo 'Rp.' . htmlspecialchars(number_format($row['biaya'], 0, ',', '.'));
+                    }
+                    echo '</td>';
+                    echo '<td>';
+                    if (!empty($row['nama_promo'])) {
+                        echo htmlspecialchars($row['nama_promo']) . ' (' . htmlspecialchars($row['diskon_persen']) . '%)';
+                    } else {
+                        echo 'N/A';
+                    }
+                    echo '</td>';
                     echo '<td>';
                     // Tampilkan tombol 'Hapus' hanya jika status sewa adalah 'Active'
                     if ($row['status'] == 'Active') {

@@ -112,3 +112,19 @@
     th {
         background-color: #f4f4f4;
     }
+
+    .film-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        background-color: #333;
+        color: #eee;
+    }
+
+    .film-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
