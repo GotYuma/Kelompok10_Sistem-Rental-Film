@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2025 at 03:40 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Jun 26, 2025 at 03:01 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,7 +42,8 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id_cust`, `nama`, `email`, `telpon`, `alamat`, `tanggaldaftar`, `statusmember`) VALUES
-(1, 'anto', 'anto@gmail.com', '1111111', 'singingi', '2025-06-19', 'Active');
+(1, 'antoa', 'anto@gmail.com', '1111111', 'singingi', '2025-06-19', 'Active'),
+(2, 'Sosuke Aizen', 'aizen@gmail.com', '08123948429', 'Rumbai', '2025-06-26', 'Active');
 
 -- --------------------------------------------------------
 
@@ -66,9 +67,18 @@ CREATE TABLE `kasetfilm` (
 --
 
 INSERT INTO `kasetfilm` (`id_film`, `judul`, `genre`, `tahunrilis`, `rating`, `stok`, `hargasewa`, `tersedia`) VALUES
-(1, 'bahaya judol', 'horror', 2025, 10, 6, 80000, 2),
-(2, 'Isaac Tangis', 'romance thriller comedy', 2000, 9, 3, 60, 3),
-(3, 'Pedro Pahlevi', 'Biography', 2005, 7, 4, 15, 2);
+(1, 'Coffee Mate', 'Comedy', 2025, 8, 9, 70000, 10),
+(2, 'Don\'t Touch', 'Fantasy', 2023, 9, 12, 90000, 12),
+(3, 'The Heartbeat', 'Family', 2024, 8, 7, 65000, 7),
+(4, 'Invasion: Next Gen', 'Action', 2024, 8, 11, 85000, 12),
+(5, 'Starlight Knight', 'Adventure', 2022, 10, 17, 92000, 17),
+(6, '7710 and Its Cat', 'Adventure', 2022, 9, 10, 60000, 10),
+(7, 'Family', 'Action', 2020, 9, 10, 75000, 10),
+(8, 'Oh~ Sweetie', 'Romance', 2025, 9, 12, 88000, 12),
+(9, 'Small Body Big Crisis', 'Comedy', 2020, 8, 10, 85000, 10),
+(10, 'Final Punch', 'Action', 2023, 9, 10, 77000, 10),
+(11, 'Last Flight', 'Romance', 2023, 8, 10, 75000, 10),
+(12, 'More Than One Truth', 'Comedy', 2019, 9, 15, 90000, 15);
 
 -- --------------------------------------------------------
 
@@ -90,7 +100,8 @@ CREATE TABLE `rent` (
 --
 
 INSERT INTO `rent` (`id_rent`, `id_cust`, `id_film`, `tanggalsewa`, `status`, `biaya`) VALUES
-(1, 1, 1, '2025-06-19', 'Active', 80000);
+(1, 1, 1, '2025-06-26', 'Active', 70000),
+(2, 1, 4, '2025-06-26', 'Active', 85000);
 
 --
 -- Indexes for dumped tables
@@ -124,19 +135,19 @@ ALTER TABLE `rent`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id_cust` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_cust` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `kasetfilm`
 --
 ALTER TABLE `kasetfilm`
-  MODIFY `id_film` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_film` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `rent`
 --
 ALTER TABLE `rent`
-  MODIFY `id_rent` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_rent` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
