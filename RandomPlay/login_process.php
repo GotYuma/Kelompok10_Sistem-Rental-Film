@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 } else {
-    header("Location: customer.php"); // Redirect if not a POST request
+    header("Location: customer.php");
     exit();
 }
-?>

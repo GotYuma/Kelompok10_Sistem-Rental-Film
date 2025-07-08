@@ -18,12 +18,14 @@ $customer = $_SESSION['customer'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Account</title>
     <link rel="stylesheet" href="randomcihuy.css">
 </head>
+
 <body>
     <header>
         <h1>Random Play Film Rental</h1>
@@ -61,4 +63,5 @@ $customer = $_SESSION['customer'];
         <p>&copy; 2023 Random Play Film Rental</p>
     </footer>
 </body>
+
 </html>

@@ -1,5 +1,5 @@
 <?php
-include 'config.php'; // Termasuk koneksi database dan session_start()
+include 'config.php';
 
 // Redirect jika customer belum login
 if (!isset($_SESSION['customer'])) {
@@ -9,7 +9,7 @@ if (!isset($_SESSION['customer'])) {
 
 $customer = $_SESSION['customer']; // Mengambil data customer dari session
 
-// --- Tambahkan ini untuk menangani pesan dari update_process.php atau return_process.php ---
+// --- Tambahan untuk menangani pesan dari update_process.php atau return_process.php ---
 $message = '';
 $message_type = ''; // 'success' atau 'error'
 
@@ -20,7 +20,7 @@ if (isset($_GET['success'])) {
     } else if ($_GET['success'] == 'rented') {
         $message = 'Film berhasil disewa!';
         $message_type = 'success';
-    } else if ($_GET['success'] == 'film_returned') { // Pesan sukses baru untuk pengembalian film
+    } else if ($_GET['success'] == 'film_returned') {
         $message = 'Film berhasil dikembalikan dan stok diperbarui!';
         $message_type = 'success';
     }
@@ -28,18 +28,19 @@ if (isset($_GET['success'])) {
     if ($_GET['error'] == 'update_failed') {
         $message = 'Gagal memperbarui profil. Silakan coba lagi.';
         $message_type = 'error';
-    } else if ($_GET['error'] == 'rent') { // Tambahan jika ada error dari rent.php
+    } else if ($_GET['error'] == 'rent') {
         $message = 'Gagal menyewa film. Silakan coba lagi.';
         $message_type = 'error';
-    } else if ($_GET['error'] == 'return_failed') { // Pesan error baru untuk pengembalian film
+    } else if ($_GET['error'] == 'return_failed') {
         $message = 'Gagal mengembalikan film. Silakan coba lagi.';
         $message_type = 'error';
-    } else if ($_GET['error'] == 'invalid_request') { // Pesan error jika request tidak valid
+    } else if ($_GET['error'] == 'invalid_request') {
         $message = 'Permintaan tidak valid.';
         $message_type = 'error';
     }
 }
 // --- Akhir penambahan ---
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +51,6 @@ if (isset($_GET['success'])) {
     <title>My Account</title>
     <link rel="stylesheet" href="randomcihuy.css">
     <style>
-        /* Gaya untuk pesan sukses/error */
         .message {
             padding: 10px;
             margin-bottom: 15px;
@@ -70,10 +70,8 @@ if (isset($_GET['success'])) {
             border: 1px solid #f5c6cb;
         }
 
-        /* Gaya tambahan untuk tombol hapus */
         .return-button {
             background-color: #dc3545;
-            /* Merah */
             color: white;
             padding: 5px 10px;
             border: none;
@@ -113,7 +111,6 @@ if (isset($_GET['success'])) {
         .discounted-price {
             font-weight: bold;
             color: #28a745;
-            /* Warna hijau untuk harga diskon */
         }
     </style>
 </head>
@@ -150,7 +147,6 @@ if (isset($_GET['success'])) {
             if (isset($_SESSION['customer']['id_cust'])) {
                 $customer_id = $_SESSION['customer']['id_cust'];
 
-                // Call the SQL Function
                 $sql_active_rentals = "SELECT GET_CUSTOMER_ACTIVE_RENTALS(?) AS active_rentals_count";
                 $stmt = $koneksi->prepare($sql_active_rentals);
                 $stmt->bind_param("i", $customer_id);
@@ -160,7 +156,6 @@ if (isset($_GET['success'])) {
                 $active_rentals_count = $row['active_rentals_count'];
                 $stmt->close();
 
-                // Now you can display $active_rentals_count on your page
                 echo "<p>Jumlah Film yang Sedang Disewa: <strong>" . htmlspecialchars($active_rentals_count) . "</strong></p>";
             } else {
                 echo "<p>Silakan login untuk melihat detail akun Anda.</p>";
@@ -188,7 +183,6 @@ if (isset($_GET['success'])) {
 
             if ($result->num_rows > 0) {
                 echo '<table>';
-                // --- Kolom 'Aksi' dan 'Promo Digunakan' ditambahkan di sini ---
                 echo '<tr><th>Film Title</th><th>Rental Date</th><th>Status</th><th>Cost</th><th>Promo Used</th><th>Aksi</th></tr>';
 
                 while ($row = $result->fetch_assoc()) {
@@ -213,14 +207,14 @@ if (isset($_GET['success'])) {
                     }
                     echo '</td>';
                     echo '<td>';
-                    // Tampilkan tombol 'Hapus' hanya jika status sewa adalah 'Active'
+                    // tampil tombol 'Hapus' hanya jika status sewa'Active'
                     if ($row['status'] == 'Active') {
                         echo '<form action="return_process.php" method="post" onsubmit="return confirm(\'Apakah Anda yakin ingin mengembalikan film ini?\');">';
                         echo '<input type="hidden" name="id_rent" value="' . htmlspecialchars($row['id_rent']) . '">';
-                        echo '<input type="submit" value="Hapus" class="return-button">'; // Tombol "Hapus" (untuk mengembalikan)
+                        echo '<input type="submit" value="Hapus" class="return-button">'; // Tombol Hapus
                         echo '</form>';
                     } else {
-                        echo '—'; // Atau pesan lain jika sudah dikembalikan
+                        echo '—';
                     }
                     echo '</td>';
                     echo '</tr>';

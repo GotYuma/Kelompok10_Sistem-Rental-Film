@@ -11,31 +11,24 @@
     <style>
         .film-card {
             position: relative;
-            /* Penting untuk posisi label */
             overflow: hidden;
-            /* Pastikan label tidak keluar dari batas kartu */
         }
 
         .promo-label {
             position: absolute;
             top: 10px;
             right: -20px;
-            /* Geser sedikit ke kanan untuk efek miring */
             background-color: #ffc107;
-            /* Warna kuning/oranye untuk promo */
             color: #333;
             padding: 5px 25px;
             font-size: 0.8em;
             font-weight: bold;
             transform: rotate(45deg);
-            /* Membuat label miring */
             transform-origin: 100% 100%;
-            /* Posisikan rotasi dari sudut kanan bawah */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
             z-index: 10;
         }
 
-        /* Tambahan styling untuk harga asli dan diskon di index.php jika diperlukan (opsional) */
         .film-card .original-price {
             text-decoration: line-through;
             color: #aaa;
@@ -104,6 +97,7 @@
             </div>
         </div>
 
+        <!-- SQL : view -->
         <div>
             <?php
             $sql_view_film_murah = "select * from film_murah_tersedia";
@@ -147,31 +141,13 @@
         <h2>Available Films</h2>
         <div class="film-grid">
             <?php
-            $current_date = date('Y-m-d');
-            // Ambil semua promo aktif saat ini
-            $active_promos_query = "SELECT diskon_persen FROM promo WHERE tanggal_mulai <= '$current_date' AND tanggal_berakhir >= '$current_date'";
-            $active_promos_result = $koneksi->query($active_promos_query);
-            $has_active_promo = ($active_promos_result && $active_promos_result->num_rows > 0);
-
-            // Jika ada promo aktif, ambil detail promo pertama (atau sesuaikan logika jika ada beberapa promo aktif)
-            $promo_diskon = 0;
-            $promo_name = "";
-            if ($has_active_promo) {
-                $first_promo = $active_promos_result->fetch_assoc();
-                $promo_diskon = $first_promo['diskon_persen'];
-            }
-
             $sql = "SELECT judul, genre, tahunrilis, rating, stok, hargasewa, gambar_film, id_film FROM kasetfilm WHERE tersedia >= 1";
             $result = $koneksi->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="film-card">';
-                    // Tampilkan label promo jika ada promo aktif
-                    if ($has_active_promo) {
-                        echo '<div class="promo-label">PROMO!</div>'; // Label "PROMO!"
-                    }
-                    // Tambahkan gambar film di sini
+
                     if (!empty($row['gambar_film'])) {
                         echo '<img src="images/' . htmlspecialchars($row['gambar_film']) . '" alt="' . htmlspecialchars($row['judul']) . '" class="film-image">';
                     }
@@ -181,15 +157,8 @@
                     echo '<p>Rating: ' . htmlspecialchars($row['rating']) . '/10</p>';
                     echo '<p>Stock: ' . htmlspecialchars($row['stok']) . '</p>';
                     echo '<p>Price: ';
-                    // Tampilkan harga asli dicoret dan harga diskon jika ada promo aktif
-                    if ($has_active_promo) {
-                        $original_price = $row['hargasewa'];
-                        $discounted_price = $original_price * (1 - ($promo_diskon / 100));
-                        echo '<span class="original-price">Rp.' . htmlspecialchars(number_format($original_price, 0, ',', '.')) . '</span>';
-                        echo '<span class="discounted-price">Rp.' . htmlspecialchars(number_format($discounted_price, 0, ',', '.')) . '</span>';
-                    } else {
-                        echo 'Rp.' . htmlspecialchars(number_format($row['hargasewa'], 0, ',', '.')); // Format harga
-                    }
+
+                    echo 'Rp.' . htmlspecialchars(number_format($row['hargasewa'], 0, ',', '.')); // Format harga
                     echo '</p>';
 
                     if (isset($_SESSION['customer'])) {

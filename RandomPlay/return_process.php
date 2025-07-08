@@ -46,14 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_rent'])) {
             $koneksi->commit();
             header("Location: myaccount.php?success=film_returned");
             exit();
-
         } catch (Exception $e) {
             // Rollback transaksi jika ada kesalahan
             $koneksi->rollback();
             header("Location: myaccount.php?error=return_failed");
             exit();
         }
-
     } else {
         // Jika id_rent tidak ditemukan atau bukan milik customer yang login
         header("Location: myaccount.php?error=invalid_request");
@@ -64,4 +62,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_rent'])) {
     header("Location: myaccount.php?error=invalid_request");
     exit();
 }
-?>

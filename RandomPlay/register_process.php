@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $koneksi->real_escape_string($_POST['password']);
     $telpon = $koneksi->real_escape_string($_POST['telpon']);
     $alamat = $koneksi->real_escape_string($_POST['alamat']);
-    
+
 
     // Hash password sebelum menyimpan
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -36,4 +36,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     header("Location: customer.php"); // Redirect if not a POST request
 }
-?>
